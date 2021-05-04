@@ -2,7 +2,7 @@ name: noed_env
 on: 
   push:
     branches-ignore:
-      - $default-branch
+      - main
 jobs:
   build:
    runs-on: ubuntu-latest
