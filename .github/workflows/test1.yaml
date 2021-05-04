@@ -1,5 +1,8 @@
 name: noed_env
-on: [push]
+on: 
+  push:
+    branches-ignore:
+      - $default-branch
 jobs:
   build:
    runs-on: ubuntu-latest
