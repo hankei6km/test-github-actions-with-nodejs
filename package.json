@@ -1,6 +1,6 @@
 {
   "name": "test-github-actions-with-nodejs",
-  "version": "0.1.1-pre.0",
+  "version": "0.1.2-pre.0",
   "description": "",
   "license": "CC0-1.0",
   "scripts": {
