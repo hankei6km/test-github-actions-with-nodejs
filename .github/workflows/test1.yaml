@@ -23,3 +23,12 @@ jobs:
 
     - name: event_path
       run: echo ${{ github.event_path }}
+
+    - name: not pre released
+      if: ${{ github.event.action !=  'prereleased' ]]
+      run: "echo 'not pre released'"
+
+    - name: pre released
+      if: ${{ github.event.action ==  'prereleased' ]]
+      run: "echo 'pre released'"
+
