@@ -1,25 +1,34 @@
 name: noed_env
 on: 
-  push:
-    branches-ignore: [ $default-branch ]
+  # push:
+  #   branches-ignore:
+  #     - main
+  release:
+    types: [prereleased]
+
+
 jobs:
-  build:
-   runs-on: ubuntu-latest
+  echo_event :
+    runs-on: ubuntu-latest
 
-   strategy:
-     matrix:
-       node-version: [8.x, 10.x, 12.x, 14.x]
+    steps:
+    - name: ref
+      run: echo ${{ github.ref }}
 
-   steps:
-   - uses: actions/checkout@v2
+    - name: event
+      run: "echo '${{ toJSON(github.event) }}'"
 
-   - name: Use Node.js ${{ matrix.node-version }}
-     uses: actions/setup-node@v1
-     with:
-        node-version: ${{ matrix.node-version }}
+    - name: event_name
+      run: echo ${{ github.event_name }}
 
-   - name: Install modules
-     run: yarn install
+    - name: event_path
+      run: echo ${{ github.event_path }}
 
-   - name: Run tests
-     run: yarn test
+    - name: not pre released
+      if: ${{ github.event.action !=  'prereleased' }}
+      run: "echo 'not pre released'"
+
+    - name: pre released
+      if: ${{ github.event.action ==  'prereleased' }}
+      run: "echo 'pre released'"
+
