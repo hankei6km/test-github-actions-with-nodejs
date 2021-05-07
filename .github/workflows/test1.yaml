@@ -1,8 +1,8 @@
 name: noed_env
 on: 
-  push:
-    branches-ignore:
-      - main
+  # push:
+  #   branches-ignore:
+  #     - main
   release:
     types:
       - published
