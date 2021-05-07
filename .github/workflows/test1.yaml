@@ -4,9 +4,8 @@ on:
   #   branches-ignore:
   #     - main
   release:
-    types:
-      - published
-      - prereleased
+    types: [prereleased]
+
 
 jobs:
   echo_event :
