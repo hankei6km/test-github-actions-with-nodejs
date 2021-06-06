@@ -1,9 +1,10 @@
-name: start_run
+name: check_run
 on: 
-  push:
-    branches-ignore:
-      - master
-      - main
+  workflow_run:
+    workflows: ["start_run"]
+    types: 
+      - completed
+      - requested
 jobs:
   echo_event :
     runs-on: ubuntu-latest
