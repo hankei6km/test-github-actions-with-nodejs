@@ -22,7 +22,10 @@ jobs:
       run: echo ${{ github.event_path }}
 
   run_only_main:
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
+    strategy:
+      matrix:
+        m: ["key1", "key2"]
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
@@ -31,8 +34,9 @@ jobs:
     steps:
       - id: test1
         run: |
-          echo "::set-output name=key1::$(date +%s%N)"
-          echo "::set-output name=key2::value2"
+          echo "::set-output name=${KEY}::$(date +%s%N)"
+        env:
+          KEY: ${{ matrix.m }}
 
   values:
     needs: run_only_main
