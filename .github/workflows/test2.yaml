@@ -55,7 +55,7 @@ jobs:
 
   values:
     #needs: gen_values
-    needs: ${{ github.event_name }}
+    needs: '${{ fromJson("[\"gen_values\"]") }}'
     #if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
