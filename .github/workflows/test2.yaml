@@ -1,0 +1,98 @@
+name: start_run
+on: 
+  push:
+    branches-ignore:
+      - master
+      - main
+jobs:
+  echo_event :
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ref
+      run: echo ${{ github.ref }}
+
+    - name: event
+      run: "echo '${{ toJSON(github.event) }}'"
+
+    - name: event_name
+      run: echo ${{ github.event_name }}
+
+    - name: event_path
+      run: echo ${{ github.event_path }}
+
+        #gen_needs:
+        #  runs-on: ubuntu-latest
+        #  outputs:
+        #    matrix: ${{ steps.json.outputs.string }}
+
+        #  steps:
+        #    - id: json 
+        #      run: |
+        #        test "${BRANCH}" == "refs/heads/main" \
+        #          && NEEDS="[]" \
+        #          || NEEDS="[]"
+        #        echo "::set-output name=string::${NEEDS}" \
+        #      env:
+        #        BRANCH: ${{ github.ref }}
+
+  # main 以外では値を生成する.
+  gen_values:
+    if: github.ref != 'refs/heads/main'
+    #needs: gen_matrix
+    strategy:
+    #  matrix: ${{fromJson(needs.gen_matrix.outputs.matrix)}}
+      matrix:
+        m: ["key1", "key2"]
+    runs-on: ubuntu-latest
+    outputs:
+      test1: ${{ steps.test1.outputs.key1 }}
+      test2: ${{ steps.test1.outputs.key2 }}
+
+    steps:
+      - id: test1
+        run: |
+          echo "::set-output name=${KEY}::$(date +%s%N)"
+        env:
+          KEY: ${{ matrix.m }}
+
+  # gen_values job の値を保管する.
+  # gen_values job がキャンセルされていても実行する.
+  # ブランチによって、outputs に設定される値を切り替える.
+  # これにより、gen_values が失敗したときだけ outputs にブランクがセットされる.
+  # 後続の job は値がブランクの場合はスキップできる. 
+  values:
+    needs: gen_values
+    if: always()
+    runs-on: ubuntu-latest
+    outputs:
+      test1: ${{ steps.test1.outputs.key1 }}
+      test2: ${{ steps.test1.outputs.key2 }}
+
+    steps:
+      - id: test1
+        run: |
+          test "${COND}" = "refs/heads/main" \
+            && echo "::set-output name=key1::fallback $(date +%s%N)" \
+            || echo "::set-output name=key1::${TEST1}" 
+          test "${COND}" = "refs/heads/main" \
+            && echo "::set-output name=key2::fallback value2" \
+            || echo "::set-output name=key2::${TEST2}" 
+        env:
+          COND: ${{ github.ref }}
+          TEST1: ${{ needs.gen_values.outputs.test1 }}
+          TEST2: ${{ needs.gen_values.outputs.test2 }}
+
+  echo_values:
+    needs: values
+    if: ${{ needs.values.outputs.test1 != '' && always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: test1
+        run: |
+          echo "test1=${TEST1}"
+          echo "test2=${TEST2}"
+        env:
+          TEST1: ${{ needs.values.outputs.test1 }}
+          TEST2: ${{ needs.values.outputs.test2 }}
+
