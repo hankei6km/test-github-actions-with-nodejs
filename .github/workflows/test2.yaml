@@ -29,7 +29,7 @@ jobs:
     steps:
       - id: json 
         run: |
-          test "${BRANCH}" == "refs/heads/main" \
+          test "${BRANCH}" != "refs/heads/main" \
             && echo "::set-output name=string::{\"m\":[]}" \
             || echo "::set-output name=string::{\"m\":[\"key1\",\"key2\"]}" \
         env:
