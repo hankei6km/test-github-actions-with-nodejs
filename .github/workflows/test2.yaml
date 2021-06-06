@@ -37,6 +37,7 @@ jobs:
 
   gen_values:
     #if: github.ref == 'refs/heads/main'
+    needs: gen_matrix
     strategy:
       matrix: ${{fromJson(needs.gen_matrix.outputs.string)}}
     runs-on: ubuntu-latest
