@@ -78,6 +78,7 @@ jobs:
 
   echo_values:
     needs: values
+    if: ${{ true }}
     runs-on: ubuntu-latest
     steps:
       - id: test1
