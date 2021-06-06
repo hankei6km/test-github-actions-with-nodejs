@@ -59,7 +59,7 @@ jobs:
     needs: gen_values
     if: ${{ \
       ( github.ref == 'refs/heads/main' &&  && always() ) || \
-      ( github.ref != 'refs/heads/main' &&  needs.gen_values.outputs.test1 != ''&& always() ) \
+      ( github.ref != 'refs/heads/main' &&  needs.gen_values.outputs.test1 != '' && always() ) \
     }}
     runs-on: ubuntu-latest
     outputs:
