@@ -41,7 +41,8 @@ jobs:
     #needs: gen_matrix
     strategy:
     #  matrix: ${{fromJson(needs.gen_matrix.outputs.matrix)}}
-      matrix: ["key1", "key2"]
+      matrix:
+        m: ["key1", "key2"]
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
