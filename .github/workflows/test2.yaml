@@ -20,3 +20,49 @@ jobs:
 
     - name: event_path
       run: echo ${{ github.event_path }}
+
+  run_only_main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      test1: ${{ steps.test1.outputs.key1 }}
+      test2: ${{ steps.test1.outputs.key2 }}
+
+    steps:
+      - id: test1
+        run: |
+          echo "::set-output name=key1::$(date +%s%N)"
+          echo "::set-output name=key2::value2"
+
+  values:
+    needs: run_only_main
+    runs-on: ubuntu-latest
+    outputs:
+      test1: ${{ steps.test1.outputs.key1 }}
+      test2: ${{ steps.test1.outputs.key2 }}
+
+    steps:
+      - id: test1
+        run: |
+          test -z "${TEST1]" \
+                           && echo "::set-output name=key1::fallback $(date +%s%N)" \
+                           || echo "::set-output name=key1::${TEST1}" 
+          test -z "${TEST12" \
+                           && echo "::set-output name=key2::fallback value2" \
+                           || echo "::set-output name=key2::${TEST2}" 
+        env:
+          TEST1: ${{ needs.run_only_main.outputs.test1 }}
+          TEST2: ${{ needs.run_only_main.outputs.test2 }}
+
+  echo_values:
+    needs: values
+    runs-on: ubuntu-latest
+    steps:
+      - id: test1
+        run: |
+          echo "test1=${TEST1}"
+          echo "test2=${TEST2}"
+        env:
+          TEST1: ${{ needs.run_only_main.outputs.test1 }}
+          TEST2: ${{ needs.run_only_main.outputs.test2 }}
+
