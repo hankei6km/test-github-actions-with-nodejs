@@ -78,7 +78,7 @@ jobs:
 
   echo_values:
     needs: values
-    if: ${{ true }}
+    if: ${{ needs.values.outputs.test1 != '' && always() }}
     runs-on: ubuntu-latest
     steps:
       - id: test1
