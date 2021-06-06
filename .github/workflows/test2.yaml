@@ -55,7 +55,7 @@ jobs:
 
   values:
     #needs: gen_values
-    needs: '${{ env.GITHUB_REPOSITORY }}'
+    needs: '${{ ${{ env.GITHUB_REPOSITORY }} }}'
     #if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
