@@ -48,7 +48,7 @@ jobs:
           test -z "${TEST1]" \
                            && echo "::set-output name=key1::fallback $(date +%s%N)" \
                            || echo "::set-output name=key1::${TEST1}" 
-          test -z "${TEST12" \
+          test -z "${TEST2}" \
                            && echo "::set-output name=key2::fallback value2" \
                            || echo "::set-output name=key2::${TEST2}" 
         env:
