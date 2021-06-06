@@ -21,23 +21,24 @@ jobs:
     - name: event_path
       run: echo ${{ github.event_path }}
 
-  gen_matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.json.outputs.string }}
+        #gen_needs:
+        #  runs-on: ubuntu-latest
+        #  outputs:
+        #    matrix: ${{ steps.json.outputs.string }}
 
-    steps:
-      - id: json 
-        run: |
-          test "${BRANCH}" != "refs/heads/main" \
-            && echo "::set-output name=string::{\"m\":[]}" \
-            || echo "::set-output name=string::{\"m\":[\"key1\",\"key2\"]}" \
-        env:
-          BRANCH: ${{ github.ref }}
+        #  steps:
+        #    - id: json 
+        #      run: |
+        #        test "${BRANCH}" == "refs/heads/main" \
+        #          && NEEDS="[]" \
+        #          || NEEDS="[]"
+        #        echo "::set-output name=string::${NEEDS}" \
+        #      env:
+        #        BRANCH: ${{ github.ref }}
 
   gen_values:
-    #if: github.ref == 'refs/heads/main'
-    needs: gen_matrix
+    if: github.ref != 'refs/heads/main'
+    #needs: gen_matrix
     strategy:
       matrix: ${{fromJson(needs.gen_matrix.outputs.matrix)}}
     runs-on: ubuntu-latest
@@ -53,7 +54,7 @@ jobs:
           KEY: ${{ matrix.m }}
 
   values:
-    needs: gen_values
+    needs: ${{ github.ref != 'refs/heads/main'&& 'gen_values' || null }}
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
