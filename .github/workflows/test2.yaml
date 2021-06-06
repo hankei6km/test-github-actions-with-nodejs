@@ -37,7 +37,8 @@ jobs:
   values:
     needs: run_only_main
     runs-on: ubuntu-latest
-    outputs:
+    if: ${{ always() }}
+      outputs:
       test1: ${{ steps.test1.outputs.key1 }}
       test2: ${{ steps.test1.outputs.key2 }}
 
