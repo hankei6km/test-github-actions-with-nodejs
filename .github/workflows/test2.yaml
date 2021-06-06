@@ -37,12 +37,12 @@ jobs:
         #        BRANCH: ${{ github.ref }}
 
   gen_values:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref != 'refs/heads/main'
     #needs: gen_matrix
     strategy:
     #  matrix: ${{fromJson(needs.gen_matrix.outputs.matrix)}}
       matrix:
-        m: ["key1", "key2"]
+        m: ["key1", "key3"]
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
