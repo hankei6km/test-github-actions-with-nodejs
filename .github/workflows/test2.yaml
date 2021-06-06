@@ -69,8 +69,8 @@ jobs:
             && echo "::set-output name=key2::fallback value2" \
             || echo "::set-output name=key2::${TEST2}" 
         env:
-          TEST1: ${{ needs.run_only_main.outputs.test1 }}
-          TEST2: ${{ needs.run_only_main.outputs.test2 }}
+          TEST1: ${{ needs.gen_values.outputs.test1 }}
+          TEST2: ${{ needs.gen_values.outputs.test2 }}
 
   echo_values:
     needs: values
