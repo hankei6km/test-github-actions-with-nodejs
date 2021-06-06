@@ -62,7 +62,7 @@ jobs:
       test2: ${{ steps.test1.outputs.key2 }}
 
     steps:
-      - run echo ${{ always() }}
+      - run: echo ${{ always() }}
       - id: test1
         run: |
           test -z "${TEST1}" \
