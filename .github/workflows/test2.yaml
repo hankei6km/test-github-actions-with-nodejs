@@ -36,13 +36,14 @@ jobs:
         #      env:
         #        BRANCH: ${{ github.ref }}
 
+  # main 以外では値を生成する.
   gen_values:
     if: github.ref != 'refs/heads/main'
     #needs: gen_matrix
     strategy:
     #  matrix: ${{fromJson(needs.gen_matrix.outputs.matrix)}}
       matrix:
-        m: ["key1", "key3"]
+        m: ["key1", "key2"]
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
@@ -55,6 +56,11 @@ jobs:
         env:
           KEY: ${{ matrix.m }}
 
+  # gen_values job の値を保管する.
+  # gen_values job がキャンセルされていても実行する.
+  # ブランチによって、outputs に設定される値を切り替える.
+  # これにより、gen_values が失敗したときだけ outputs にブランクがセットされる.
+  # 後続の job は値がブランクの場合はスキップできる. 
   values:
     needs: gen_values
     if: always()
