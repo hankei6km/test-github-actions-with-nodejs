@@ -37,7 +37,7 @@ jobs:
         #        BRANCH: ${{ github.ref }}
 
   gen_values:
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     #needs: gen_matrix
     #strategy:
     #  matrix: ${{fromJson(needs.gen_matrix.outputs.matrix)}}
@@ -54,8 +54,9 @@ jobs:
           KEY: ${{ matrix.m }}
 
   values:
-    needs: gen_values
-    if: github.ref != 'refs/heads/main'
+    #needs: gen_values
+    needs: ${{fromJson([\"gen_values\"])}}
+    #if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
