@@ -1,9 +1,5 @@
 name: start_run
-on: 
-  push:
-    branches-ignore:
-      - master
-      - main
+on: push
 jobs:
   echo_event :
     runs-on: ubuntu-latest
@@ -35,9 +31,23 @@ jobs:
         #        echo "::set-output name=string::${NEEDS}" \
         #      env:
         #        BRANCH: ${{ github.ref }}
+  dummy_wait:
+    # job の if に always を使うと cancell が効かなくなる?
+    # if が steps にも反映される?
+    # 式に cancelled() を入れて対応.
+    if: ${{ always() && !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "wait"
+          sleep 60
+      - name: Done
+        run: |
+          echo "done"
 
   # main 以外では値を生成する.
   gen_values:
+    needs: dummy_wait
     if: github.ref != 'refs/heads/main'
     #needs: gen_matrix
     strategy:
