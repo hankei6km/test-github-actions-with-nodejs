@@ -32,11 +32,15 @@ jobs:
         #      env:
         #        BRANCH: ${{ github.ref }}
   dummy_wait:
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - run: |
           echo "wait"
           sleep 60
+      - name: Done
+        run: |
+          echo "done"
 
   # main 以外では値を生成する.
   gen_values:
