@@ -40,6 +40,7 @@ jobs:
 
   # main 以外では値を生成する.
   gen_values:
+    needs: dummy_wait
     if: github.ref == 'refs/heads/main'
     #needs: gen_matrix
     strategy:
