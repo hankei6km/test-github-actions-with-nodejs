@@ -31,6 +31,12 @@ jobs:
         #        echo "::set-output name=string::${NEEDS}" \
         #      env:
         #        BRANCH: ${{ github.ref }}
+  dummy_wait:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "wait"
+          sleep 60
 
   # main 以外では値を生成する.
   gen_values:
