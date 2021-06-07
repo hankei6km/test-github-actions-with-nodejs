@@ -32,6 +32,9 @@ jobs:
         #      env:
         #        BRANCH: ${{ github.ref }}
   dummy_wait:
+    # job の if に always を使うと cancell が効かなくなる?
+    # if が steps にも反映される?
+    # 式に cancelled() を入れて対応.
     if: ${{ always() && !cancelled() }}
     runs-on: ubuntu-latest
     steps:
