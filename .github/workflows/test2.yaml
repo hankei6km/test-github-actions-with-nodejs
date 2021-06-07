@@ -32,7 +32,7 @@ jobs:
         #      env:
         #        BRANCH: ${{ github.ref }}
   dummy_wait:
-    if: always()
+    if: ${{ always() && !cancelled() }}
     runs-on: ubuntu-latest
     steps:
       - run: |
