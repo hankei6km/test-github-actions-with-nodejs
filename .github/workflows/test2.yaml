@@ -59,7 +59,7 @@ jobs:
   # 後続の job は値がブランクの場合はスキップできる. 
   values:
     needs: gen_values
-    if: cancelled()
+    if: always()
     runs-on: ubuntu-latest
     outputs:
       test1: ${{ steps.test1.outputs.key1 }}
